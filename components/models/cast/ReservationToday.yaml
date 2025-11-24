@@ -25,7 +25,7 @@ properties:
     type: array
     items:
       type: string
-    description: オプション一覧（例: 追加メニュー）
+    description: "オプション一覧（例: 追加メニュー）"
     nullable: true
     example: ["ヘッドスパ", "指名料"]
   notes:

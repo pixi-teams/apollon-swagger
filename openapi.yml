@@ -531,6 +531,8 @@ components:
           example: 通常出勤
       nullable: true
       description: キャストの今日の出勤情報。休みの場合、このオブジェクトはnullになります。
+    ReservationToday:
+      $ref: "./components/models/cast/ReservationToday.yaml"
     TodaysReservations:
       type: object
       properties:
@@ -887,19 +889,65 @@ components:
         - message
   parameters:
     CastIdPath:
-      $ref: "./components/parameters/cast/CastIdPath.yaml"
+      name: castId
+      in: path
+      description: キャストID
+      required: true
+      schema:
+        type: string
+        example: "cast001"
     CustomerIdPath:
-      $ref: "./components/parameters/cast/CustomerIdPath.yaml"
+      name: customerId
+      in: path
+      description: '顧客ID'
+      required: true
+      schema:
+        type: string
+        example: 'cust_12345'
     PeriodQuery:
-      $ref: "./components/parameters/cast/PeriodQuery.yaml"
+      name: period
+      in: query
+      description: '集計期間 (today, week, month)'
+      required: true
+      schema:
+        type: string
+        enum: [today, week, month]
+        example: 'month'
     StartDateQuery:
-      $ref: "./components/parameters/cast/StartDateQuery.yaml"
+      name: startDate
+      in: query
+      description: '取得開始日 (YYYY-MM-DD)'
+      required: true
+      schema:
+        type: string
+        format: date
+        example: '2025-01-01'
     EndDateQuery:
-      $ref: "./components/parameters/cast/EndDateQuery.yaml"
+      name: endDate
+      in: query
+      description: '取得終了日 (YYYY-MM-DD)'
+      required: true
+      schema:
+        type: string
+        format: date
+        example: '2025-01-31'
     ShopIdPath:
-      $ref: "./components/parameters/web/ShopId.yaml"
+      name: shopId
+      in: path
+      required: true
+      description: 店舗ID
+      schema:
+        type: string
+        example: '1014'
     DateQuery:
-      $ref: "./components/parameters/web/Date.yaml"
+      name: date
+      in: query
+      required: true
+      description: 日付 (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2025-10-22'
   requestBodies:
     CastLoginRequest:
       required: true
