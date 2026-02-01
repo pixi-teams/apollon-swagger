@@ -90,6 +90,38 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         default:
           $ref: '#/components/responses/DefaultError'
+  /casts/{castId}/mypage:
+    get:
+      tags:
+        - Cast
+      summary: マイページ情報取得
+      description: ログインしているキャストのマイページ情報を取得します。
+      operationId: getCastMypage
+      parameters:
+        - $ref: "#/components/parameters/CastIdPath"
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CastMypage"
+        '401':
+          description: トークン無効
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: キャストが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          $ref: '#/components/responses/DefaultError'
   /casts/{castId}/todays-shift:
     get:
       tags:
@@ -416,6 +448,56 @@ components:
         - storeId
         - castId
         - authProvider
+    CastMypage:
+      type: object
+      description: キャストマイページ情報
+      properties:
+        castId:
+          type: string
+          description: キャストID
+          example: "cst-00001"
+        stageName:
+          type: string
+          description: 源氏名
+          example: "アリス"
+        imageUrl:
+          type: string
+          description: プロフィール画像URL
+          example: "https://example.com/alice.jpg"
+        description:
+          type: string
+          description: 店舗からのキャスト紹介文
+          example: "新人セラピストのアリスです。癒やしの時間を提供します。"
+        height:
+          type: number
+          description: 身長(cm)
+          nullable: true
+          example: 160
+        bust:
+          type: number
+          description: バスト(cm)
+          nullable: true
+          example: 85
+        waist:
+          type: number
+          description: ウエスト(cm)
+          nullable: true
+          example: 58
+        hip:
+          type: number
+          description: ヒップ(cm)
+          nullable: true
+          example: 86
+        shopName:
+          type: string
+          description: 所属店舗名
+          example: "Apollon Ginza"
+      required:
+        - castId
+        - stageName
+        - imageUrl
+        - description
+        - shopName
     LogoutRequest:
       type: object
       properties:
