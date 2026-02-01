@@ -245,6 +245,35 @@ paths:
                 $ref: "#/components/schemas/CreatedCastReservationResponse"
         default:
           $ref: '#/components/responses/DefaultError'
+  /casts/{castId}/reservations/{reservationId}:
+    put:
+      tags:
+        - Cast
+      summary: 予約情報編集
+      description: キャストが既存の予約情報を編集します。
+      operationId: updateReservation
+      parameters:
+        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: "#/components/parameters/ReservationIdPath"
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CastReservation'
+      responses:
+        '200':
+          description: 編集成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdatedCastReservationResponse"
+        '404':
+          description: 予約が存在しない
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          $ref: '#/components/responses/DefaultError'
   /casts/{castId}/customers:
     get:
       tags:
@@ -723,6 +752,10 @@ components:
         - advertisement
     CreatedCastReservationResponse:
       $ref: "./components/results/cast/CreatedCastReservationResponse.yaml"
+    UpdatedCastReservationResponse:
+      $ref: "./components/results/cast/UpdatedCastReservationResponse.yaml"
+    UpdatedCastReservation:
+      $ref: "./components/results/cast/UpdatedCastReservation.yaml"
     ReservationSummary:
       type: object
       properties:
@@ -978,6 +1011,14 @@ components:
       schema:
         type: string
         example: "cast001"
+    ReservationIdPath:
+      name: reservationId
+      in: path
+      description: 予約ID
+      required: true
+      schema:
+        type: string
+        example: "res_98231"
     CustomerIdPath:
       name: customerId
       in: path

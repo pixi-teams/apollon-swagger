@@ -1,0 +1,30 @@
+type: object
+properties:
+  reservation_id:
+    type: string
+    description: 予約ID
+    example: "res_98231"
+  store_id:
+    type: string
+    description: 店舗ID
+    example: "1"
+  cast_id:
+    type: string
+    description: キャストID
+    example: "12"
+  reservation_datetime:
+    type: string
+    format: date-time
+    description: 予約日時（ISO8601）
+    example: "2025-11-15T20:00:00+09:00"
+  updated_at:
+    type: string
+    format: date-time
+    description: 更新日時
+    example: "2025-11-10T19:30:00+09:00"
+required:
+  - reservation_id
+  - store_id
+  - cast_id
+  - reservation_datetime
+  - updated_at

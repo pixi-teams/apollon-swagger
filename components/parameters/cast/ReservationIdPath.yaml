@@ -1,0 +1,7 @@
+name: reservationId
+in: path
+description: 予約ID
+required: true
+schema:
+  type: string
+  example: "res_98231"
