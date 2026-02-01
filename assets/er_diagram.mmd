@@ -1,0 +1,119 @@
+erDiagram
+    stores ||--o{ casts : "has"
+    stores ||--o{ courses : "has"
+    stores ||--o{ customers : "manages"
+    
+    casts ||--o{ shifts : "has"
+    casts ||--o{ reservations : "assigned_to"
+    
+    customers ||--o{ reservations : "makes"
+    customers ||--o{ visit_histories : "has"
+
+    reservations ||--|{ reservation_advertisements : "has"
+    reservations ||--|{ reservation_options : "has"
+
+    stores {
+        string id PK "店舗ID"
+        string name "店舗名"
+        string catch_phrase "キャッチフレーズ"
+        string description "説明"
+        string address "住所"
+        string access "アクセス"
+        string business_hours "営業時間"
+        string phone_number "電話番号"
+        string line_id "LINE ID"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    casts {
+        string id PK "キャストID"
+        string store_id FK "店舗ID"
+        string user_id "Supabase Auth User ID"
+        string name "キャスト名 (displayName)"
+        string email "メールアドレス"
+        string status "ステータス (active, inactive, etc)"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    customers {
+        string id PK "顧客ID"
+        string store_id FK "店舗ID (管理店舗)"
+        string name "氏名"
+        string kana "カナ"
+        string phone "電話番号"
+        string email "メールアドレス"
+        string notes "顧客メモ"
+        date first_visit_date "初回来店日"
+        date last_visit_date "最終来店日"
+        int visit_count "来店回数"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    courses {
+        string id PK "コースID"
+        string store_id FK "店舗ID"
+        string name "コース名"
+        int price "料金"
+        int duration_minutes "所要時間(分)"
+        string description "説明"
+        boolean is_active "有効フラグ"
+    }
+
+    shifts {
+        string id PK "シフトID"
+        string cast_id FK "キャストID"
+        date date "日付"
+        datetime start_time "開始日時"
+        datetime end_time "終了日時"
+        string status "ステータス (通常, 遅番, 休み)"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    reservations {
+        string id PK "予約ID"
+        string store_id FK "店舗ID"
+        string cast_id FK "キャストID"
+        string customer_id FK "顧客ID"
+        datetime reservation_datetime "予約日時"
+        string shimei_type "指名種別 (photo, regular)"
+        string extension "延長時間 (30, 60, 90)"
+        string discount "割引"
+        string payment_method "支払い方法 (cash, card, unknown)"
+        string reservation_method "予約経路 (line, x, instagram, other)"
+        string reservation_status "ステータス (new, draft, confirmed, cancelled)"
+        string treatment_note "施術メモ"
+        string customer_request "ご要望"
+        string course_name "コース名 (スナップショット)"
+        int total_fee "合計金額"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    reservation_advertisements {
+        string id PK
+        string reservation_id FK
+        string media_name "媒体名 (x, instagram)"
+    }
+    
+    reservation_options {
+        string id PK
+        string reservation_id FK
+        string option_name "オプション名"
+        int price "料金"
+    }
+
+    visit_histories {
+        string id PK "来店履歴ID"
+        string customer_id FK "顧客ID"
+        string cast_id FK "担当キャストID"
+        string store_id FK "店舗ID"
+        date visit_date "来店日"
+        string course_name "コース名"
+        int total_fee "支払い金額"
+        string notes "メモ"
+        timestamp created_at
+    }
