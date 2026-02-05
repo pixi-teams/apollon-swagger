@@ -58,6 +58,8 @@ GET
 | reservations[].menu | string | メニュー／コース名 | ✕ |
 | reservations[].options | array | オプション一覧（例: 追加メニュー） | ◯ |
 | reservations[].notes | string | 施術メモ | ◯ |
+| reservations[].roomName | string | ルーム名 | ◯ |
+| reservations[].shimeiType | string | 指名タイプ（none/honshimei/photo） | ✕ |
 
 ---
 
@@ -72,7 +74,9 @@ GET
       "customerName": "山田",
       "menu": "60分コース",
       "options": ["ヘッドスパ", "指名料"],
-      "notes": "肌荒れ対応"
+      "notes": "肌荒れ対応",
+      "roomName": "Room A",
+      "shimeiType": "honshimei"
     },
     {
       "reservationId": "r2",
@@ -81,7 +85,9 @@ GET
       "customerName": "S.K",
       "menu": "90分コース",
       "options": [],
-      "notes": ""
+      "notes": "",
+      "roomName": "Room B",
+      "shimeiType": "none"
     }
   ]
 }

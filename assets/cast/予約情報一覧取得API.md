@@ -61,6 +61,9 @@ GET
 | reservations[].paymentDetailId | string | 決済詳細ID | ◯ |
 | reservations[].route | string | 予約経路（WEB/電話/店舗など） | ✕ |
 | reservations[].status | string | 予約ステータス | ✕ |
+| reservations[].roomName | string | ルーム名 | ◯ |
+| reservations[].shimeiType | string | 指名タイプ（none/honshimei/photo） | ✕ |
+| reservations[].endDatetime | string | 予約終了日時 | ✕ |
 
 ```json
 {
@@ -77,7 +80,10 @@ GET
       "paymentMethod": "credit",
       "paymentDetailId": "pay_987",
       "route": "WEB",
-      "status": "reserved"
+      "status": "reserved",
+      "roomName": "Room A",
+      "shimeiType": "honshimei",
+      "endDatetime": "2025-01-05T14:00:00Z"
     }
   ]
 }
