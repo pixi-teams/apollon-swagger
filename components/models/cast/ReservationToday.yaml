@@ -33,9 +33,20 @@ properties:
     description: 施術メモ
     nullable: true
     example: 肌荒れ対応
+  roomName:
+    type: string
+    description: ルーム名
+    nullable: true
+    example: Room A
+  shimeiType:
+    type: string
+    enum: [none, honshimei, photo]
+    description: 指名タイプ
+    example: honshimei
 required:
   - reservationId
   - startTime
   - endTime
   - menu
+  - shimeiType
 description: 本日の予約一件分の詳細情報。

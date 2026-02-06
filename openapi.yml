@@ -772,6 +772,18 @@ components:
           type: integer
         status:
           type: string
+        roomName:
+          type: string
+          nullable: true
+          description: ルーム名
+        shimeiType:
+          type: string
+          enum: [none, honshimei, photo]
+          description: 指名タイプ
+        endTime:
+          type: string
+          format: date-time
+          description: 予約終了時刻
       required:
         - reservationId
         - customerName
@@ -779,6 +791,8 @@ components:
         - course
         - totalFee
         - status
+        - shimeiType
+        - endTime
     ReservationSummaryList:
       type: object
       properties:
