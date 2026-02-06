@@ -1,0 +1,31 @@
+type: object
+properties:
+  success:
+    type: boolean
+    description: 処理成功フラグ
+    example: true
+  notification:
+    type: object
+    description: 更新後の通知情報
+    properties:
+      id:
+        type: integer
+        description: 通知ID
+        example: 123
+      is_read:
+        type: boolean
+        description: 既読フラグ
+        example: true
+      read_at:
+        type: string
+        format: date-time
+        description: 既読日時（ISO 8601形式）
+        example: '2026-02-06T15:00:00Z'
+    required:
+      - id
+      - is_read
+      - read_at
+required:
+  - success
+  - notification
+description: 通知既読化レスポンス

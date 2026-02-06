@@ -1,0 +1,14 @@
+type: object
+properties:
+  success:
+    type: boolean
+    description: 処理成功フラグ
+    example: true
+  updated_count:
+    type: integer
+    description: 更新件数
+    example: 5
+required:
+  - success
+  - updated_count
+description: 一括既読化レスポンス

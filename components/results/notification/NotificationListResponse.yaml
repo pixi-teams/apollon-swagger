@@ -1,0 +1,20 @@
+type: object
+properties:
+  notifications:
+    type: array
+    items:
+      $ref: '../../models/notification/Notification.yaml'
+    description: 通知リスト
+  total:
+    type: integer
+    description: 総件数
+    example: 45
+  unread_count:
+    type: integer
+    description: 未読件数
+    example: 5
+required:
+  - notifications
+  - total
+  - unread_count
+description: 通知一覧レスポンス

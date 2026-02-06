@@ -18,6 +18,8 @@ tags:
     description: Web予約システム向けAPI
   - name: Cast
     description: キャスト専用API
+  - name: Notification
+    description: 通知機能API
 paths:
   /auth/login:
     post:
@@ -98,7 +100,7 @@ paths:
       description: ログインしているキャストのマイページ情報を取得します。
       operationId: getCastMypage
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -107,19 +109,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CastMypage"
+                $ref: '#/components/schemas/CastMypage'
         '401':
           description: トークン無効
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
         '404':
           description: キャストが存在しない
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/todays-shift:
@@ -130,7 +132,7 @@ paths:
       description: ログインしているキャストの今日の出勤情報を取得します。
       operationId: getTodaysShift
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -139,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TodaysShift"
+                $ref: '#/components/schemas/TodaysShift'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/todays-reservations:
@@ -150,7 +152,7 @@ paths:
       description: ログインしているキャストの今日の予約情報を取得します。
       operationId: getTodaysReservations
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -159,7 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TodaysReservations"
+                $ref: '#/components/schemas/TodaysReservations'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/sales-summary:
@@ -170,7 +172,7 @@ paths:
       description: ログインしているキャストの売上サマリを取得します。
       operationId: getSalesSummary
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -179,7 +181,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SalesSummary"
+                $ref: '#/components/schemas/SalesSummary'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/reservation-form:
@@ -190,7 +192,7 @@ paths:
       description: 予約フォームに必要な項目や選択肢のリストを取得します。
       operationId: getReservationForm
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -199,7 +201,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReservationForm"
+                $ref: '#/components/schemas/ReservationForm'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/reservations:
@@ -210,9 +212,9 @@ paths:
       description: 指定された期間の予約情報の一覧を取得します。
       operationId: getReservationList
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
-        - $ref: "#/components/parameters/StartDateQuery"
-        - $ref: "#/components/parameters/EndDateQuery"
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/StartDateQuery'
+        - $ref: '#/components/parameters/EndDateQuery'
       security:
         - BearerAuth: []
       responses:
@@ -221,7 +223,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReservationSummaryList"
+                $ref: '#/components/schemas/ReservationSummaryList'
         default:
           $ref: '#/components/responses/DefaultError'
     post:
@@ -231,7 +233,7 @@ paths:
       description: キャストが予約情報を登録または更新します。
       operationId: createOrUpdateReservation
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       requestBody:
@@ -242,7 +244,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreatedCastReservationResponse"
+                $ref: '#/components/schemas/CreatedCastReservationResponse'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/reservations/{reservationId}:
@@ -253,8 +255,8 @@ paths:
       description: キャストが既存の予約情報を編集します。
       operationId: updateReservation
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
-        - $ref: "#/components/parameters/ReservationIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/ReservationIdPath'
       security:
         - BearerAuth: []
       requestBody:
@@ -265,13 +267,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdatedCastReservationResponse"
+                $ref: '#/components/schemas/UpdatedCastReservationResponse'
         '404':
           description: 予約が存在しない
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/customers:
@@ -282,7 +284,7 @@ paths:
       description: キャストに紐づく顧客の一覧を取得します。
       operationId: getCustomerList
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -291,7 +293,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CustomerSummaryList"
+                $ref: '#/components/schemas/CustomerSummaryList'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/customers/{customerId}:
@@ -302,8 +304,8 @@ paths:
       description: 指定された顧客の詳細情報を取得します。
       operationId: getCustomerDetail
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
-        - $ref: "#/components/parameters/CustomerIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/CustomerIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -312,7 +314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CustomerDetail"
+                $ref: '#/components/schemas/CustomerDetail'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/{castId}/customers/{customerId}/visits:
@@ -323,8 +325,8 @@ paths:
       description: 指定された顧客の来店履歴を取得します。
       operationId: getVisitHistory
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
-        - $ref: "#/components/parameters/CustomerIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/CustomerIdPath'
       security:
         - BearerAuth: []
       responses:
@@ -333,7 +335,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VisitHistoryList"
+                $ref: '#/components/schemas/VisitHistoryList'
         default:
           $ref: '#/components/responses/DefaultError'
   /casts/report:
@@ -368,7 +370,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SalesReportResponse"
+                $ref: '#/components/schemas/SalesReportResponse'
         default:
           $ref: '#/components/responses/DefaultError'
   /web/shops/{shopId}/attendance-casts:
@@ -378,8 +380,8 @@ paths:
       summary: アテンダンスキャスト一覧取得
       description: 指定された店舗と日付における出勤キャストの一覧を取得します。
       parameters:
-        - $ref: "#/components/parameters/ShopIdPath"
-        - $ref: "#/components/parameters/DateQuery"
+        - $ref: '#/components/parameters/ShopIdPath'
+        - $ref: '#/components/parameters/DateQuery'
       responses:
         '200':
           $ref: '#/components/responses/AttendanceCastList'
@@ -392,7 +394,7 @@ paths:
       summary: 店舗情報取得
       description: 指定したIDの店舗情報を取得します。
       parameters:
-        - $ref: "#/components/parameters/ShopIdPath"
+        - $ref: '#/components/parameters/ShopIdPath'
       responses:
         '200':
           $ref: '#/components/responses/StoreSummary'
@@ -405,7 +407,7 @@ paths:
       summary: 料金情報取得
       description: 指定した店舗の料金情報を取得します。
       parameters:
-        - $ref: "#/components/parameters/ShopIdPath"
+        - $ref: '#/components/parameters/ShopIdPath'
       responses:
         '200':
           $ref: '#/components/responses/PriceInfo'
@@ -418,7 +420,7 @@ paths:
       summary: キャスト情報詳細取得
       description: 指定したIDのキャストの詳細情報を取得します。
       parameters:
-        - $ref: "#/components/parameters/CastIdPath"
+        - $ref: '#/components/parameters/CastIdPath'
       responses:
         '200':
           $ref: '#/components/responses/CastDetail'
@@ -435,6 +437,164 @@ paths:
       responses:
         '201':
           description: 予約成功
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /notifications:
+    get:
+      tags:
+        - Notification
+      summary: 通知一覧取得
+      description: ログインユーザーの通知一覧を取得します。
+      operationId: getNotifications
+      parameters:
+        - name: limit
+          in: query
+          description: '取得件数（デフォルト: 20, 最大: 50）'
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 50
+            example: 20
+        - name: offset
+          in: query
+          description: 'オフセット（デフォルト: 0）'
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+            example: 0
+        - name: is_read
+          in: query
+          description: '未読/既読フィルタ（未指定の場合は全件）'
+          required: false
+          schema:
+            type: boolean
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationListResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /notifications/unread-count:
+    get:
+      tags:
+        - Notification
+      summary: 未読件数取得
+      description: ログインユーザーの未読通知件数を取得します。
+      operationId: getUnreadCount
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnreadCountResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /notifications/read-all:
+    patch:
+      tags:
+        - Notification
+      summary: 一括既読化
+      description: ログインユーザーの未読通知をすべて既読にします。
+      operationId: readAllNotifications
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadAllResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /notifications/{notificationId}/read:
+    patch:
+      tags:
+        - Notification
+      summary: 通知既読化
+      description: 指定された通知を既読にします。
+      operationId: readNotification
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdPath'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationReadResponse'
+        '404':
+          description: 通知が存在しない、または自分の通知ではない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /push/subscribe:
+    post:
+      tags:
+        - Notification
+      summary: Push通知サブスクリプション登録
+      description: Push通知を受信するためのサブスクリプションを登録します。
+      operationId: pushSubscribe
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/PushSubscriptionRequest'
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushSubscribeResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /push/unsubscribe:
+    delete:
+      tags:
+        - Notification
+      summary: Push通知サブスクリプション解除
+      description: Push通知のサブスクリプションを解除します。
+      operationId: pushUnsubscribe
+      parameters:
+        - name: endpoint
+          in: query
+          description: 解除するエンドポイントURL
+          required: true
+          schema:
+            type: string
+            example: 'https://fcm.googleapis.com/fcm/send/xxxxxx'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 正常系レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushUnsubscribeResponse'
+        '404':
+          description: サブスクリプションが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
 components:
@@ -484,19 +644,19 @@ components:
         castId:
           type: string
           description: キャストID
-          example: "cst-00001"
+          example: 'cst-00001'
         stageName:
           type: string
           description: 源氏名
-          example: "アリス"
+          example: 'アリス'
         imageUrl:
           type: string
           description: プロフィール画像URL
-          example: "https://example.com/alice.jpg"
+          example: 'https://example.com/alice.jpg'
         description:
           type: string
           description: 店舗からのキャスト紹介文
-          example: "新人セラピストのアリスです。癒やしの時間を提供します。"
+          example: '新人セラピストのアリスです。癒やしの時間を提供します。'
         height:
           type: number
           description: 身長(cm)
@@ -520,7 +680,7 @@ components:
         shopName:
           type: string
           description: 所属店舗名
-          example: "Apollon Ginza"
+          example: 'Apollon Ginza'
       required:
         - castId
         - stageName
@@ -643,7 +803,7 @@ components:
       nullable: true
       description: キャストの今日の出勤情報。休みの場合、このオブジェクトはnullになります。
     ReservationToday:
-      $ref: "./components/models/cast/ReservationToday.yaml"
+      $ref: './components/models/cast/ReservationToday.yaml'
     TodaysReservations:
       type: object
       properties:
@@ -661,7 +821,7 @@ components:
         - count
         - reservations
     SalesSummaryItem:
-      $ref: "./components/models/cast/SalesSummaryItem.yaml"
+      $ref: './components/models/cast/SalesSummaryItem.yaml'
     SalesSummary:
       type: object
       properties:
@@ -677,70 +837,70 @@ components:
         - thisWeek
         - thisMonth
     ReservationForm:
-      $ref: "./components/results/cast/ReservationForm.yaml"
+      $ref: './components/results/cast/ReservationForm.yaml'
     CastReservation:
       type: object
       properties:
         store_id:
           type: string
           description: 店舗ID
-          example: "1"
+          example: '1'
         cast_id:
           type: string
           description: キャストID（ログイン済みでも送信）
-          example: "12"
+          example: '12'
         reservation_datetime:
           type: string
           format: date-time
           description: 予約日時（ISO8601形式）
-          example: "2025-11-15T20:00:00+09:00"
+          example: '2025-11-15T20:00:00+09:00'
         shimei_type:
           type: string
           description: 指名種別
           enum: [photo, regular]
-          example: "photo"
+          example: 'photo'
         extension:
           type: string
           description: 延長時間
-          enum: ["30", "60", "90"]
+          enum: ['30', '60', '90']
           nullable: true
-          example: "60"
+          example: '60'
         discount:
           type: string
           description: 店舗割引（店舗設定に応じる）
           nullable: true
-          example: "A"
+          example: 'A'
         payment_method:
           type: string
           description: 支払い方法
           enum: [unknown, cash, card]
-          example: "cash"
+          example: 'cash'
         reservation_method:
           type: string
           description: 予約方法
           enum: [line, x, instagram, other]
-          example: "line"
+          example: 'line'
         reservation_status:
           type: string
           description: ステータス
           enum: [new, draft]
-          example: "new"
+          example: 'new'
         advertisement:
           type: array
           items:
             type: string
           description: 広告媒体（複数選択可）
-          example: ["x", "instagram"]
+          example: ['x', 'instagram']
         treatment_note:
           type: string
           description: 施術メモ
           nullable: true
-          example: "いい人"
+          example: 'いい人'
         request:
           type: string
           description: ご要望
           nullable: true
-          example: "静かに過ごしたい"
+          example: '静かに過ごしたい'
       required:
         - store_id
         - cast_id
@@ -751,11 +911,11 @@ components:
         - reservation_status
         - advertisement
     CreatedCastReservationResponse:
-      $ref: "./components/results/cast/CreatedCastReservationResponse.yaml"
+      $ref: './components/results/cast/CreatedCastReservationResponse.yaml'
     UpdatedCastReservationResponse:
-      $ref: "./components/results/cast/UpdatedCastReservationResponse.yaml"
+      $ref: './components/results/cast/UpdatedCastReservationResponse.yaml'
     UpdatedCastReservation:
-      $ref: "./components/results/cast/UpdatedCastReservation.yaml"
+      $ref: './components/results/cast/UpdatedCastReservation.yaml'
     ReservationSummary:
       type: object
       properties:
@@ -909,7 +1069,7 @@ components:
         - lastWeekSales
         - thisMonthSales
     AttendanceCast:
-      $ref: "./components/results/web/AttendanceCast.yaml"
+      $ref: './components/results/web/AttendanceCast.yaml'
     StoreSummary:
       type: object
       description: 店舗サマリー情報
@@ -917,35 +1077,35 @@ components:
         name:
           type: string
           description: 店舗名
-          example: "Apollon 銀座店"
+          example: 'Apollon 銀座店'
         catch_phrase:
           type: string
           description: キャッチフレーズ
-          example: "最高の癒しをお届けします"
+          example: '最高の癒しをお届けします'
         description:
           type: string
           description: 店舗詳細説明
-          example: "銀座の中心にある落ち着いた雰囲気のサロンです。"
+          example: '銀座の中心にある落ち着いた雰囲気のサロンです。'
         address:
           type: string
           description: 店舗住所
-          example: "東京都中央区銀座1-1-1"
+          example: '東京都中央区銀座1-1-1'
         access:
           type: string
           description: アクセス情報
-          example: "銀座駅A1出口より徒歩3分"
+          example: '銀座駅A1出口より徒歩3分'
         business_hours:
           type: string
           description: 営業時間
-          example: "18:00 - 26:00"
+          example: '18:00 - 26:00'
         phone_number:
           type: string
           description: 電話番号
-          example: "03-1234-5678"
+          example: '03-1234-5678'
         line_id:
           type: string
           description: LINE ID
-          example: "@apollon_ginza"
+          example: '@apollon_ginza'
       required:
         - name
         - catch_phrase
@@ -956,9 +1116,9 @@ components:
         - phone_number
         - line_id
     PriceInfo:
-      $ref: "./components/results/web/PriceInfo.yaml"
+      $ref: './components/results/web/PriceInfo.yaml'
     CastDetail:
-      $ref: "./components/results/web/CastDetail.yaml"
+      $ref: './components/results/web/CastDetail.yaml'
     WebReservation:
       type: object
       properties:
@@ -1002,17 +1162,33 @@ components:
           type: integer
           description: 合計料金
           example: 8000
+    Notification:
+      $ref: './components/models/notification/Notification.yaml'
+    NotificationListResponse:
+      $ref: './components/results/notification/NotificationListResponse.yaml'
+    UnreadCountResponse:
+      $ref: './components/results/notification/UnreadCountResponse.yaml'
+    NotificationReadResponse:
+      $ref: './components/results/notification/NotificationReadResponse.yaml'
+    ReadAllResponse:
+      $ref: './components/results/notification/ReadAllResponse.yaml'
+    PushSubscriptionRequest:
+      $ref: './components/models/notification/PushSubscriptionRequest.yaml'
+    PushSubscribeResponse:
+      $ref: './components/results/notification/PushSubscribeResponse.yaml'
+    PushUnsubscribeResponse:
+      $ref: './components/results/notification/PushUnsubscribeResponse.yaml'
     Error:
       type: object
       properties:
         code:
           type: string
           description: エラーコード
-          example: "NOT_FOUND"
+          example: 'NOT_FOUND'
         message:
           type: string
           description: エラーメッセージ
-          example: "リソースが見つかりませんでした。"
+          example: 'リソースが見つかりませんでした。'
       required:
         - code
         - message
@@ -1024,7 +1200,7 @@ components:
       required: true
       schema:
         type: string
-        example: "cast001"
+        example: 'cast001'
     ReservationIdPath:
       name: reservationId
       in: path
@@ -1032,7 +1208,7 @@ components:
       required: true
       schema:
         type: string
-        example: "res_98231"
+        example: 'res_98231'
     CustomerIdPath:
       name: customerId
       in: path
@@ -1085,6 +1261,14 @@ components:
         type: string
         format: date
         example: '2025-10-22'
+    NotificationIdPath:
+      name: notificationId
+      in: path
+      description: 通知ID
+      required: true
+      schema:
+        type: integer
+        example: 123
   requestBodies:
     CastLoginRequest:
       required: true
@@ -1109,13 +1293,19 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/CastReservation"
+            $ref: '#/components/schemas/CastReservation'
     WebReservation:
       required: true
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/WebReservation"
+            $ref: '#/components/schemas/WebReservation'
+    PushSubscriptionRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PushSubscriptionRequest'
   responses:
     AttendanceCastList:
       description: 成功
@@ -1124,34 +1314,34 @@ components:
           schema:
             type: array
             items:
-              $ref: "#/components/schemas/AttendanceCast"
+              $ref: '#/components/schemas/AttendanceCast'
     StoreSummary:
       description: 成功
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/StoreSummary"
+            $ref: '#/components/schemas/StoreSummary'
     PriceInfo:
       description: 成功
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/PriceInfo"
+            $ref: '#/components/schemas/PriceInfo'
     CastDetail:
       description: 成功
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/CastDetail"
+            $ref: '#/components/schemas/CastDetail'
     DefaultError:
       description: エラーレスポンス
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: "認証トークンを`Authorization`ヘッダーに`Bearer`スキーマで設定します。"
+      description: '認証トークンを`Authorization`ヘッダーに`Bearer`スキーマで設定します。'

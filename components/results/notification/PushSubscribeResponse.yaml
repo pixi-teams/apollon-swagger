@@ -1,0 +1,47 @@
+type: object
+properties:
+  success:
+    type: boolean
+    description: 処理成功フラグ
+    example: true
+  subscription:
+    type: object
+    description: 登録されたサブスクリプション情報
+    properties:
+      id:
+        type: integer
+        description: サブスクリプションID
+        example: 789
+      user_id:
+        type: string
+        format: uuid
+        description: ユーザーID
+        example: '550e8400-e29b-41d4-a716-446655440000'
+      endpoint:
+        type: string
+        description: Push通知エンドポイント
+        example: 'https://fcm.googleapis.com/fcm/send/xxxxxx'
+      device_type:
+        type: string
+        description: デバイスタイプ
+        nullable: true
+        example: 'ios'
+      is_active:
+        type: boolean
+        description: アクティブフラグ
+        example: true
+      created_at:
+        type: string
+        format: date-time
+        description: 作成日時（ISO 8601形式）
+        example: '2026-02-06T16:00:00Z'
+    required:
+      - id
+      - user_id
+      - endpoint
+      - is_active
+      - created_at
+required:
+  - success
+  - subscription
+description: Push通知サブスクリプション登録レスポンス

@@ -1,0 +1,39 @@
+type: object
+properties:
+  endpoint:
+    type: string
+    description: Push通知エンドポイントURL
+    example: 'https://fcm.googleapis.com/fcm/send/xxxxxx'
+  keys:
+    type: object
+    description: 暗号化キー
+    properties:
+      p256dh:
+        type: string
+        description: P256DH公開鍵（Base64エンコード）
+        example: 'BNcRdreALR...'
+      auth:
+        type: string
+        description: Auth秘密鍵（Base64エンコード）
+        example: 'tBHItJI5sv...'
+    required:
+      - p256dh
+      - auth
+  user_agent:
+    type: string
+    description: ユーザーエージェント
+    nullable: true
+    example: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15'
+  device_type:
+    type: string
+    description: デバイスタイプ
+    enum:
+      - ios
+      - android
+      - desktop
+    nullable: true
+    example: 'ios'
+required:
+  - endpoint
+  - keys
+description: Push通知サブスクリプション登録リクエスト

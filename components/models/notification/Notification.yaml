@@ -1,0 +1,77 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: 通知ID
+    example: 123
+  user_id:
+    type: string
+    format: uuid
+    description: ユーザーID
+    example: '550e8400-e29b-41d4-a716-446655440000'
+  type:
+    type: string
+    description: 通知種別
+    enum:
+      - reservation_created
+      - reservation_approved
+      - reservation_rejected
+      - reservation_updated
+      - reservation_cancelled
+      - shift_approved
+      - salary_confirmed
+    example: reservation_created
+  title:
+    type: string
+    description: 通知タイトル
+    example: 'Web予約が入りました'
+  message:
+    type: string
+    description: 通知メッセージ
+    example: '田中様からフェイシャルコースの予約が入りました'
+  related_id:
+    type: integer
+    description: 関連エンティティID
+    nullable: true
+    example: 456
+  related_type:
+    type: string
+    description: 関連エンティティタイプ
+    nullable: true
+    example: 'reservation'
+  is_read:
+    type: boolean
+    description: 既読フラグ
+    example: false
+  read_at:
+    type: string
+    format: date-time
+    description: 既読日時（ISO 8601形式）
+    nullable: true
+    example: '2026-02-06T15:00:00Z'
+  created_at:
+    type: string
+    format: date-time
+    description: 作成日時（ISO 8601形式）
+    example: '2026-02-06T14:30:00Z'
+  updated_at:
+    type: string
+    format: date-time
+    description: 更新日時（ISO 8601形式）
+    example: '2026-02-06T14:30:00Z'
+  expires_at:
+    type: string
+    format: date-time
+    description: 有効期限（ISO 8601形式）
+    nullable: true
+    example: '2026-03-08T14:30:00Z'
+required:
+  - id
+  - user_id
+  - type
+  - title
+  - message
+  - is_read
+  - created_at
+  - updated_at
+description: 通知オブジェクト

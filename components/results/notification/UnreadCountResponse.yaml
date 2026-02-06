@@ -1,0 +1,9 @@
+type: object
+properties:
+  unread_count:
+    type: integer
+    description: 未読件数
+    example: 5
+required:
+  - unread_count
+description: 未読件数レスポンス

@@ -1,0 +1,14 @@
+type: object
+properties:
+  success:
+    type: boolean
+    description: 処理成功フラグ
+    example: true
+  message:
+    type: string
+    description: 処理結果メッセージ
+    example: 'Subscription deleted successfully'
+required:
+  - success
+  - message
+description: Push通知サブスクリプション解除レスポンス
