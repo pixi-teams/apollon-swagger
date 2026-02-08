@@ -92,6 +92,93 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         default:
           $ref: '#/components/responses/DefaultError'
+  /auth/oauth/start:
+    get:
+      tags:
+        - Auth
+      summary: OAuth認証開始
+      description: 指定されたプロバイダ（Google, Apple）でのOAuth認証を開始するためのURLを取得します。
+      operationId: getAuthOauthStart
+      parameters:
+        - name: provider
+          in: query
+          description: 認証プロバイダ (google, apple)
+          required: true
+          schema:
+            type: string
+            enum: [google, apple]
+        - name: storeId
+          in: query
+          description: 店舗ID (オプション)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 認証URL取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: 認証用リダイレクトURL
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /auth/oauth/callback:
+    get:
+      tags:
+        - Auth
+      summary: OAuthコールバック
+      description: OAuthプロバイダからのコールバックを受け付け、フロントエンドへリダイレクトします。
+      operationId: getAuthOauthCallback
+      parameters:
+        - name: code
+          in: query
+          description: 認証コード
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: 状態トークン
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: フロントエンドへのリダイレクト
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /auth/exchange:
+    post:
+      tags:
+        - Auth
+      summary: トークン交換
+      description: ワンタイムコードを使用してアクセストークンを取得します。
+      operationId: postAuthExchange
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: ワンタイムコード
+              required:
+                - code
+      responses:
+        '200':
+          description: トークン取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthTokenResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
   /casts/{castId}/mypage:
     get:
       tags:
@@ -1178,6 +1265,31 @@ components:
       $ref: './components/results/notification/PushSubscribeResponse.yaml'
     PushUnsubscribeResponse:
       $ref: './components/results/notification/PushUnsubscribeResponse.yaml'
+    OAuthTokenResponse:
+      type: object
+      description: OAuth認証トークンレスポンス
+      properties:
+        accessToken:
+          type: string
+          description: Supabaseアクセストークン
+        refreshToken:
+          type: string
+          description: Supabaseリフレッシュトークン
+        expiresIn:
+          type: integer
+          description: トークンの有効期限（秒）
+        castId:
+          type: string
+          description: キャストID
+        storeId:
+          type: string
+          description: 店舗ID
+      required:
+        - accessToken
+        - refreshToken
+        - expiresIn
+        - castId
+        - storeId
     Error:
       type: object
       properties:
