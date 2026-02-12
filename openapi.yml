@@ -18,6 +18,8 @@ tags:
     description: Web予約システム向けAPI
   - name: Cast
     description: キャスト専用API
+  - name: Admin
+    description: 管理者・スタッフ専用API
   - name: Notification
     description: 通知機能API
 paths:
@@ -684,6 +686,145 @@ paths:
                 $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
+  /admin/auth/login:
+    post:
+      tags:
+        - Admin
+      summary: 管理者・スタッフログイン
+      description: メールアドレスまたはスタッフIDを使用して管理者・スタッフがログインします。
+      operationId: adminLogin
+      requestBody:
+        $ref: '#/components/requestBodies/AdminLoginRequest'
+      responses:
+        '200':
+          description: ログイン成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLoginResponse'
+        '400':
+          description: リクエスト不正
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: パスワード不一致
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: ユーザーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /admin/auth/oauth/start:
+    get:
+      tags:
+        - Admin
+      summary: 管理者・スタッフOAuth認証開始
+      description: 指定されたプロバイダ（Google, Apple）でのOAuth認証を開始するためのURLを取得します。
+      operationId: getAdminAuthOauthStart
+      parameters:
+        - name: provider
+          in: query
+          description: 認証プロバイダ (google, apple)
+          required: true
+          schema:
+            type: string
+            enum: [google, apple]
+        - name: storeId
+          in: query
+          description: 店舗ID
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 認証URL取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authUrl:
+                    type: string
+                    description: 認証用リダイレクトURL
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /admin/auth/oauth/callback:
+    get:
+      tags:
+        - Admin
+      summary: 管理者・スタッフOAuthコールバック
+      description: OAuthプロバイダからのコールバックを受け付け、フロントエンドへリダイレクトします。
+      operationId: getAdminAuthOauthCallback
+      parameters:
+        - name: code
+          in: query
+          description: 認証コード
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: CSRF防止用のstateパラメータ
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: フロントエンドへのリダイレクト
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /admin/auth/oauth/token:
+    post:
+      tags:
+        - Admin
+      summary: 管理者・スタッフトークン交換
+      description: コールバックで取得した認証コードを使用してアクセストークンを取得します。
+      operationId: postAdminAuthOauthToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: コールバックで取得した認証コード
+                storeId:
+                  type: string
+                  description: 店舗ID
+              required:
+                - code
+                - storeId
+      responses:
+        '200':
+          description: トークン取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOAuthTokenResponse'
+        '400':
+          description: 認証コード不正
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: ユーザーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
 components:
   schemas:
     AuthMeResponse:
@@ -1290,6 +1431,126 @@ components:
         - expiresIn
         - castId
         - storeId
+    AdminLoginRequest:
+      type: object
+      description: 管理者・スタッフログインリクエスト
+      properties:
+        storeId:
+          type: string
+          description: 店舗ID
+          example: '1001'
+        emailAddress:
+          type: string
+          description: メールアドレス
+          example: 'admin@example.com'
+        staffId:
+          type: string
+          description: スタッフID
+          example: 'stf-00123'
+        password:
+          type: string
+          description: パスワード
+          example: 'abc12345'
+      required:
+        - storeId
+        - password
+      oneOf:
+        - required:
+            - emailAddress
+        - required:
+            - staffId
+    AdminLoginResponse:
+      type: object
+      description: 管理者・スタッフログインレスポンス
+      properties:
+        isSuccess:
+          type: boolean
+          description: ログイン成功フラグ
+          example: true
+        accessToken:
+          type: string
+          description: アクセストークン（JWT）
+          example: xxxxx.yyyyy.zzzzz
+        refreshToken:
+          type: string
+          description: リフレッシュトークン
+          example: rrrrr.sssss.ttttt
+        userId:
+          type: string
+          description: Supabase Auth のユーザーID
+          example: a1b2c3d4e5
+        storeId:
+          type: string
+          description: 店舗ID
+          example: '1001'
+        staffId:
+          type: string
+          description: スタッフID
+          example: 'stf-00123'
+        staffName:
+          type: string
+          description: スタッフ名
+          example: '管理者A'
+        role:
+          type: string
+          description: ロール
+          enum: [admin, staff]
+          example: 'admin'
+      required:
+        - isSuccess
+        - accessToken
+        - refreshToken
+        - userId
+        - storeId
+        - staffId
+        - staffName
+        - role
+    AdminOAuthTokenResponse:
+      type: object
+      description: 管理者・スタッフOAuth認証トークンレスポンス
+      properties:
+        isSuccess:
+          type: boolean
+          description: ログイン成功フラグ
+          example: true
+        accessToken:
+          type: string
+          description: アクセストークン（JWT）
+          example: xxxxx.yyyyy.zzzzz
+        refreshToken:
+          type: string
+          description: リフレッシュトークン
+          example: rrrrr.sssss.ttttt
+        userId:
+          type: string
+          description: Supabase Auth のユーザーID
+          example: a1b2c3d4e5
+        storeId:
+          type: string
+          description: 店舗ID
+          example: '1001'
+        staffId:
+          type: string
+          description: スタッフID
+          example: 'stf-00123'
+        staffName:
+          type: string
+          description: スタッフ名
+          example: '管理者A'
+        role:
+          type: string
+          description: ロール
+          enum: [admin, staff]
+          example: 'admin'
+      required:
+        - isSuccess
+        - accessToken
+        - refreshToken
+        - userId
+        - storeId
+        - staffId
+        - staffName
+        - role
     Error:
       type: object
       properties:
@@ -1382,6 +1643,12 @@ components:
         type: integer
         example: 123
   requestBodies:
+    AdminLoginRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AdminLoginRequest'
     CastLoginRequest:
       required: true
       content:
