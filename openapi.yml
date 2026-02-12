@@ -825,6 +825,26 @@ paths:
                 $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
+  /admin/auth/logout:
+    post:
+      tags:
+        - Admin
+      summary: 管理者・スタッフログアウト
+      description: 管理者・スタッフをログアウトさせます。
+      operationId: adminLogout
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/LogoutRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
 components:
   schemas:
     AuthMeResponse:
