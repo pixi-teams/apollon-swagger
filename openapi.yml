@@ -365,6 +365,149 @@ paths:
                 $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
+  /casts/{castId}/shifts:
+    post:
+      tags:
+        - Cast
+      summary: シフト申請作成
+      description: キャストがシフト申請を作成します。
+      operationId: createShift
+      parameters:
+        - $ref: '#/components/parameters/CastIdPath'
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateShiftRequest'
+      responses:
+        '201':
+          description: シフト申請作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateShiftResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /casts/{castId}/shifts/{shiftId}:
+    put:
+      tags:
+        - Cast
+      summary: シフト申請編集
+      description: キャストがシフト申請を編集します。
+      operationId: updateShift
+      parameters:
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/ShiftIdPath'
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateShiftRequest'
+      responses:
+        '200':
+          description: シフト申請編集成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateShiftResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
+    delete:
+      tags:
+        - Cast
+      summary: シフト申請削除
+      description: キャストがシフト申請を削除します。
+      operationId: deleteShift
+      parameters:
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/ShiftIdPath'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: シフト申請削除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteShiftResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
   /casts/{castId}/customers:
     get:
       tags:
@@ -1585,6 +1728,180 @@ components:
       required:
         - code
         - message
+    CreateShiftRequest:
+      type: object
+      description: シフト申請作成リクエスト
+      properties:
+        date:
+          type: string
+          format: date
+          description: '日付（ISO8601形式: YYYY-MM-DD）'
+          example: '2026-02-20'
+        start_time:
+          type: string
+          format: date-time
+          description: '出勤開始日時（ISO8601形式）'
+          example: '2026-02-20T13:00:00+09:00'
+        end_time:
+          type: string
+          format: date-time
+          description: '出勤終了日時（ISO8601形式）'
+          example: '2026-02-20T21:00:00+09:00'
+        memo:
+          type: string
+          description: メモ
+          nullable: true
+          example: '早めの出勤を希望します'
+      required:
+        - date
+        - start_time
+        - end_time
+    CreateShiftResponse:
+      type: object
+      description: シフト申請作成レスポンス
+      properties:
+        data:
+          type: object
+          properties:
+            shift_id:
+              type: string
+              description: シフトID
+              example: 'shift_12345'
+            cast_id:
+              type: string
+              description: キャストID
+              example: 'cast_001'
+            date:
+              type: string
+              format: date
+              description: 日付
+              example: '2026-02-20'
+            start_time:
+              type: string
+              format: date-time
+              description: 出勤開始日時
+              example: '2026-02-20T13:00:00+09:00'
+            end_time:
+              type: string
+              format: date-time
+              description: 出勤終了日時
+              example: '2026-02-20T21:00:00+09:00'
+            memo:
+              type: string
+              description: メモ
+              nullable: true
+              example: '早めの出勤を希望します'
+            created_at:
+              type: string
+              format: date-time
+              description: 作成日時
+              example: '2026-02-15T10:30:00+09:00'
+          required:
+            - shift_id
+            - cast_id
+            - date
+            - start_time
+            - end_time
+            - created_at
+      required:
+        - data
+    UpdateShiftRequest:
+      type: object
+      description: シフト申請編集リクエスト
+      properties:
+        date:
+          type: string
+          format: date
+          description: '日付（ISO8601形式: YYYY-MM-DD）'
+          example: '2026-02-20'
+        start_time:
+          type: string
+          format: date-time
+          description: '出勤開始日時（ISO8601形式）'
+          example: '2026-02-20T14:00:00+09:00'
+        end_time:
+          type: string
+          format: date-time
+          description: '出勤終了日時（ISO8601形式）'
+          example: '2026-02-20T22:00:00+09:00'
+        memo:
+          type: string
+          description: メモ
+          nullable: true
+          example: '時間を1時間遅らせました'
+      required:
+        - date
+        - start_time
+        - end_time
+    UpdateShiftResponse:
+      type: object
+      description: シフト申請編集レスポンス
+      properties:
+        data:
+          type: object
+          properties:
+            shift_id:
+              type: string
+              description: シフトID
+              example: 'shift_12345'
+            cast_id:
+              type: string
+              description: キャストID
+              example: 'cast_001'
+            date:
+              type: string
+              format: date
+              description: 日付
+              example: '2026-02-20'
+            start_time:
+              type: string
+              format: date-time
+              description: 出勤開始日時
+              example: '2026-02-20T14:00:00+09:00'
+            end_time:
+              type: string
+              format: date-time
+              description: 出勤終了日時
+              example: '2026-02-20T22:00:00+09:00'
+            memo:
+              type: string
+              description: メモ
+              nullable: true
+              example: '時間を1時間遅らせました'
+            updated_at:
+              type: string
+              format: date-time
+              description: 更新日時
+              example: '2026-02-15T11:00:00+09:00'
+          required:
+            - shift_id
+            - cast_id
+            - date
+            - start_time
+            - end_time
+            - updated_at
+      required:
+        - data
+    DeleteShiftResponse:
+      type: object
+      description: シフト申請削除レスポンス
+      properties:
+        success:
+          type: boolean
+          description: 処理成功フラグ
+          example: true
+        message:
+          type: string
+          description: 処理結果メッセージ
+          example: 'シフトが正常に削除されました。'
+        deleted_shift_id:
+          type: string
+          description: 削除されたシフトID
+          example: 'shift_12345'
+      required:
+        - success
+        - message
+        - deleted_shift_id
   parameters:
     CastIdPath:
       name: castId
@@ -1602,6 +1919,14 @@ components:
       schema:
         type: string
         example: 'res_98231'
+    ShiftIdPath:
+      name: shiftId
+      in: path
+      description: シフトID
+      required: true
+      schema:
+        type: string
+        example: 'shift_12345'
     CustomerIdPath:
       name: customerId
       in: path
@@ -1705,6 +2030,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/PushSubscriptionRequest'
+    CreateShiftRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateShiftRequest'
+    UpdateShiftRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateShiftRequest'
   responses:
     AttendanceCastList:
       description: 成功
