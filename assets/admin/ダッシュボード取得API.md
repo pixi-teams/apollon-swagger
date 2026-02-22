@@ -3,7 +3,7 @@
 ## 概要
 
 管理画面（admin）のダッシュボード表示に必要な情報を集約して取得するAPI。  
-売上・予約数の期間別サマリ、出勤情報、案内用情報（キャスト別最短受付時刻・SNS共有用テキスト）を返却する。
+売上・予約数の期間別サマリ、出勤情報、案内用情報（キャスト別最短受付時刻・SNS店舗URL）を返却する。
 
 本APIはダッシュボード専用の集約API（BFF）とする。
 
@@ -13,13 +13,11 @@
 
 ## エンドポイント
 
-### 単一店舗ログイン型
-
 ```
 GET /admin/dashboard
 ```
 
-### 複数店舗管理者対応型
+または
 
 ```
 GET /admin/stores/{storeId}/dashboard
@@ -73,18 +71,30 @@ GET /admin/stores/{storeId}/dashboard
         "cast_id": "cast_001",
         "cast_name": "あかり",
         "earliest_available_time": "14:30",
-        "status": "available"
+        "status": "available",
+        "badges": {
+          "is_new_cast": true,
+          "is_popular": false,
+          "area": "渋谷",
+          "room": "VIPルーム"
+        }
       },
       {
         "cast_id": "cast_002",
         "cast_name": "みさ",
         "earliest_available_time": null,
-        "status": "full"
+        "status": "full",
+        "badges": {
+          "is_new_cast": false,
+          "is_popular": true,
+          "area": null,
+          "room": "スタンダードルーム"
+        }
       }
     ],
     "share": {
-      "x_text": "本日のご案内可能時間はこちら！",
-      "instagram_text": "本日のご案内状況"
+      "x_url": "https://x.com/store_account",
+      "instagram_url": "https://instagram.com/store_account"
     }
   },
 
@@ -99,8 +109,8 @@ GET /admin/stores/{storeId}/dashboard
       }
     ],
     "share": {
-      "x_text": "本日の出勤：あかり 10:00-19:00",
-      "instagram_text": "本日の出勤情報はこちら"
+      "x_url": "https://x.com/store_account",
+      "instagram_url": "https://instagram.com/store_account"
     }
   }
 }
@@ -116,18 +126,35 @@ GET /admin/stores/{storeId}/dashboard
 | cast_name | string | 表示名 |
 | earliest_available_time | string \| null | 最短受付可能時刻（HH:mm） |
 | status | string | available / full |
+| badges | object | バッジ情報（下記参照） |
+
+### badges フィールド
+
+| フィールド | 型 | 説明 |
+|------------|------|------|
+| is_new_cast | boolean | `casts.created_at` から3ヶ月以内なら true |
+| is_popular | boolean | 本指名（`shimei_type = 'regular'`）の累計件数が閾値（TBD）超過なら true |
+| area | string \| null | `stores.area` が設定されている場合のみ返す（未設定時は null） |
+| room | string | `casts.room_name` から取得（必ず返す、null不可） |
+
+> **備考**
+> - バッジは `guide_info.casts` のみに付与する（`shift_info.casts` は対象外）
+> - 人気バッジの閾値は実装時に決定する（TBD）
 
 ---
 
-## 表示ルール（フロント）
+## share フィールド
 
-- earliest_available_time がある → `HH:mm〜`
-- null ＋ status=full → 「満了」表示
+| フィールド | 型 | 説明 |
+|------------|------|------|
+| x_url | string | 店舗のXアカウントURL |
+| instagram_url | string | 店舗のInstagramアカウントURL |
 
 ---
 
 ## 備考
 
-- 分数ではなく時刻で返却する
-- ダッシュボード表示専用の値とする
+- SNS投稿テキストはAPIでは生成しない
+- 店舗SNSリンクのみ返却する
+- ダッシュボード専用BFFとして扱う
 - テンプレートデータは含めない

@@ -1,0 +1,29 @@
+type: object
+description: guide_info.casts の1要素（バッジ情報付きキャスト）
+properties:
+  cast_id:
+    type: string
+    description: キャストID
+    example: "cast_001"
+  cast_name:
+    type: string
+    description: 表示名
+    example: "あかり"
+  earliest_available_time:
+    type: string
+    nullable: true
+    description: 最短受付可能時刻（HH:mm）。空き枠がない場合は null
+    example: "14:30"
+  status:
+    type: string
+    enum: [available, full]
+    description: 受付ステータス
+    example: "available"
+  badges:
+    $ref: './DashboardCastBadges.yaml'
+required:
+  - cast_id
+  - cast_name
+  - earliest_available_time
+  - status
+  - badges

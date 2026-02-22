@@ -26,6 +26,7 @@
 | business_hours | string | Yes | 営業時間 |
 | phone_number | string | Yes | 電話番号 |
 | line_id | string | Yes | LINE ID |
+| area | string | No | エリア（例: 渋谷） |
 | created_at | timestamp | Yes | 作成日時 |
 | updated_at | timestamp | Yes | 更新日時 |
 
@@ -40,6 +41,7 @@
 | name | string | Yes | キャスト名 |
 | email | string | No | メールアドレス |
 | status | string | Yes | ステータス |
+| room_name | string | No | 担当ルーム名 |
 | created_at | timestamp | Yes | 作成日時 |
 | updated_at | timestamp | Yes | 更新日時 |
 

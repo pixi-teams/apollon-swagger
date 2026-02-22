@@ -988,6 +988,79 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         default:
           $ref: '#/components/responses/DefaultError'
+  /admin/dashboard:
+    get:
+      tags:
+        - Admin
+      summary: 管理者ダッシュボード取得
+      description: |
+        管理画面のダッシュボード表示に必要な情報を集約して返却します。
+        売上・予約数の期間別サマリ、シフト情報、案内用情報（キャスト別最短受付時刻・バッジ・SNS店舗URL）を含みます。
+        店舗IDは認証情報から解決します。
+      operationId: getAdminDashboard
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: ダッシュボード取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDashboardResponse'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
+  /admin/stores/{storeId}/dashboard:
+    get:
+      tags:
+        - Admin
+      summary: 店舗別管理者ダッシュボード取得
+      description: |
+        指定した店舗の管理画面ダッシュボード情報を取得します。
+        マルチ店舗管理権限を持つ管理者向けエンドポイントです。
+      operationId: getAdminStoreDashboard
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: storeId
+          in: path
+          description: 店舗ID
+          required: true
+          schema:
+            type: string
+            example: '1001'
+      responses:
+        '200':
+          description: ダッシュボード取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDashboardResponse'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 指定店舗へのアクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 店舗が存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
 components:
   schemas:
     AuthMeResponse:
@@ -1668,6 +1741,129 @@ components:
         - staffId
         - staffName
         - role
+    DashboardCastBadges:
+      $ref: './components/results/admin/DashboardCastBadges.yaml'
+    DashboardGuideInfoCast:
+      $ref: './components/results/admin/DashboardGuideInfoCast.yaml'
+    AdminDashboardResponse:
+      type: object
+      description: 管理者ダッシュボードレスポンス
+      properties:
+        summary_cards:
+          type: object
+          description: 売上・予約数の期間別サマリ
+          properties:
+            today:
+              $ref: '#/components/schemas/DashboardSummaryCard'
+            yesterday:
+              $ref: '#/components/schemas/DashboardSummaryCard'
+            this_week:
+              $ref: '#/components/schemas/DashboardSummaryCard'
+            this_month:
+              $ref: '#/components/schemas/DashboardSummaryCard'
+          required:
+            - today
+            - yesterday
+            - this_week
+            - this_month
+        guide_info:
+          type: object
+          description: 案内用情報（キャスト一覧・SNSリンク）
+          properties:
+            casts:
+              type: array
+              items:
+                $ref: '#/components/schemas/DashboardGuideInfoCast'
+            share:
+              $ref: '#/components/schemas/DashboardShare'
+          required:
+            - casts
+            - share
+        shift_info:
+          type: object
+          description: シフト情報
+          properties:
+            date:
+              type: string
+              format: date
+              description: 対象日付
+              example: '2026-02-22'
+            casts:
+              type: array
+              items:
+                type: object
+                properties:
+                  cast_id:
+                    type: string
+                    example: 'cast_001'
+                  cast_name:
+                    type: string
+                    example: 'あかり'
+                  start_time:
+                    type: string
+                    description: 出勤開始時刻（HH:mm）
+                    example: '10:00'
+                  end_time:
+                    type: string
+                    description: 出勤終了時刻（HH:mm）
+                    example: '19:00'
+                required:
+                  - cast_id
+                  - cast_name
+                  - start_time
+                  - end_time
+            share:
+              $ref: '#/components/schemas/DashboardShare'
+          required:
+            - date
+            - casts
+            - share
+      required:
+        - summary_cards
+        - guide_info
+        - shift_info
+    DashboardSummaryCard:
+      type: object
+      description: 期間別サマリカード
+      properties:
+        sales:
+          type: integer
+          description: 売上金額（円）
+          example: 120000
+        reservation_count:
+          type: integer
+          description: 予約件数
+          example: 18
+        diff_rate:
+          type: number
+          format: float
+          description: 前期比率（正=増加、負=減少）
+          example: 0.12
+        diff_label:
+          type: string
+          description: 比較対象ラベル
+          enum: [vs_yesterday, vs_day_before, vs_last_week, vs_last_month]
+          example: 'vs_yesterday'
+      required:
+        - sales
+        - reservation_count
+        - diff_rate
+        - diff_label
+    DashboardShare:
+      type: object
+      description: SNSシェア用リンク
+      properties:
+        x_url:
+          type: string
+          description: 店舗のX（Twitter）アカウントURL
+          example: 'https://x.com/store_account'
+        instagram_url:
+          type: string
+          description: 店舗のInstagramアカウントURL
+          example: 'https://instagram.com/store_account'
+      required:
+        - x_url
+        - instagram_url
     AdminOAuthTokenResponse:
       type: object
       description: 管理者・スタッフOAuth認証トークンレスポンス
