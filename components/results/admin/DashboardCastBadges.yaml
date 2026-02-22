@@ -1,0 +1,25 @@
+type: object
+description: キャストのバッジ情報
+properties:
+  is_new_cast:
+    type: boolean
+    description: 登録から3ヶ月以内の場合 true
+    example: true
+  is_popular:
+    type: boolean
+    description: 本指名（shimei_type = 'regular'）の累計件数が閾値を超えている場合 true（閾値はTBD）
+    example: false
+  area:
+    type: string
+    nullable: true
+    description: 店舗のエリア設定値。stores.area が未設定の場合は null
+    example: "渋谷"
+  room:
+    type: string
+    description: キャストの担当ルーム名（casts.room_name から取得）
+    example: "VIPルーム"
+required:
+  - is_new_cast
+  - is_popular
+  - area
+  - room
