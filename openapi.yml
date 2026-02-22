@@ -365,6 +365,50 @@ paths:
                 $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/DefaultError'
+    delete:
+      tags:
+        - Cast
+      summary: 予約削除
+      description: キャストが予約を削除します。論理削除（ソフトデリート）を行います。予約のステータスによっては削除できない場合があります。
+      operationId: deleteReservation
+      parameters:
+        - $ref: '#/components/parameters/CastIdPath'
+        - $ref: '#/components/parameters/ReservationIdPath'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 予約削除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteReservationResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/DefaultError'
   /casts/{castId}/shifts:
     post:
       tags:
@@ -2098,6 +2142,32 @@ components:
         - success
         - message
         - deleted_shift_id
+    DeleteReservationResponse:
+      type: object
+      description: 予約削除レスポンス
+      properties:
+        success:
+          type: boolean
+          description: 処理成功フラグ
+          example: true
+        message:
+          type: string
+          description: 処理結果メッセージ
+          example: '予約が正常に削除されました。'
+        deleted_reservation_id:
+          type: string
+          description: 削除された予約ID
+          example: 'res_98231'
+        deleted_at:
+          type: string
+          format: date-time
+          description: 削除日時（ISO8601形式）
+          example: '2026-02-22T10:00:00+09:00'
+      required:
+        - success
+        - message
+        - deleted_reservation_id
+        - deleted_at
   parameters:
     CastIdPath:
       name: castId
